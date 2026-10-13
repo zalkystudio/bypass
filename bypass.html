@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Elka Bypass Mobile</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        elka: {
+                            50: '#f0fdf4',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', "Segoe UI", 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+                        mono: ['SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { -webkit-tap-highlight-color: transparent; }
+        /* Custom smooth scrollbar */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.3); border-radius: 9999px; }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col justify-between font-sans selection:bg-emerald-500 selection:text-white transition-colors duration-300">
+
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border-b border-gray-200/80 dark:border-zinc-800/80 transition-colors duration-300">
+        <div class="max-w-md mx-auto px-4 h-14 flex items-center justify-between">
+            <div class="flex items-center space-x-2.5">
+                <div class="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-sm font-bold text-sm">
+                    E
+                </div>
+                <div>
+                    <h1 class="font-semibold text-sm tracking-tight text-gray-900 dark:text-white">
+                        Elka Bypass <span class="text-[10px] font-normal text-gray-500 dark:text-zinc-400">Mobile</span>
+                    </h1>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-1">
+                <button onclick="toggleDarkMode()" aria-label="Toggle Theme" class="w-10 h-10 flex items-center justify-center rounded-full text-gray-600 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 transition">
+                    <i class="fa-solid fa-moon dark:hidden text-sm"></i>
+                    <i class="fa-solid fa-sun hidden dark:block text-sm"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-md w-full mx-auto px-4 py-4 pb-24 space-y-4">
+
+        <!-- TAB: BYPASS STUDIO -->
+        <div id="view-studio" class="space-y-4">
+            
+            <!-- Quick Helper / Status Card -->
+            <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800/80 rounded-2xl p-4 shadow-sm space-y-3">
+                <div class="flex items-center justify-between text-xs text-gray-500 dark:text-zinc-400">
+                    <span class="flex items-center gap-1.5 font-medium">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        Mesin Bypass Aktif
+                    </span>
+                    <span id="proxy-status-badge" class="font-mono text-[10px] bg-gray-100 dark:bg-zinc-800 px-2 py-0.5 rounded-md">Auto-Gateway</span>
+                </div>
+
+                <!-- URL Input Form -->
+                <form id="bypass-form" onsubmit="handleBypassSubmit(event)" class="space-y-3">
+                    <div class="relative">
+                        <input type="text" id="url-input" required 
+                            placeholder="Tempel link (ouo.io, bit.ly, s.id, dll)..." 
+                            class="w-full pl-4 pr-20 py-3.5 bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl text-sm placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition">
+                        
+                        <div class="absolute inset-y-1 right-1 flex items-center space-x-0.5 pr-1">
+                            <button type="button" onclick="pasteClipboard()" aria-label="Paste from clipboard" class="w-9 h-9 flex items-center justify-center text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white rounded-lg transition" title="Paste">
+                                <i class="fa-solid fa-paste text-xs"></i>
+                            </button>
+                            <button type="button" onclick="clearInput()" aria-label="Clear input" class="w-9 h-9 flex items-center justify-center text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white rounded-lg transition" title="Clear">
+                                <i class="fa-solid fa-xmark text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Options Grid -->
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <select id="bypass-method" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl text-gray-700 dark:text-zinc-300 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+                            <option value="auto">Smart Auto Gateway</option>
+                            <option value="allorigins">AllOrigins Proxy</option>
+                            <option value="corsproxy">CORSProxy.io</option>
+                            <option value="iframe">Sandbox Frame</option>
+                        </select>
+
+                        <button type="submit" class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-xl transition shadow-sm active:scale-[0.98] flex items-center justify-center space-x-1.5">
+                            <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+                            <span>Bypass Link</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Result Card Container -->
+            <div id="result-card" class="hidden bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800/80 rounded-2xl overflow-hidden shadow-sm space-y-3 p-4">
+                <div class="flex items-center justify-between border-b border-gray-100 dark:border-zinc-800 pb-3">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xs font-semibold text-gray-900 dark:text-white">Hasil Berhasil Diekstrak</h3>
+                            <p class="text-[10px] text-gray-500 dark:text-zinc-400" id="result-meta-info">Selesai</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-1">
+                        <button onclick="copyFinalUrl()" class="px-2.5 py-1.5 text-xs bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded-lg font-medium transition flex items-center gap-1">
+                            <i class="fa-solid fa-copy"></i> Salin
+                        </button>
+                        <a id="external-open-btn" href="#" target="_blank" class="px-2.5 py-1.5 text-xs bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-medium transition flex items-center gap-1">
+                            Buka <i class="fa-solid fa-external-link text-[10px]"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Destination URL Display -->
+                <div class="space-y-1">
+                    <span class="text-[11px] font-medium text-gray-500 dark:text-zinc-400">URL Tujuan Akhir:</span>
+                    <div class="bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl p-3 text-xs font-mono text-emerald-600 dark:text-emerald-400 break-all select-all" id="final-url-text">
+                        -
+                    </div>
+                </div>
+
+                <!-- View Mode Tabs (Reader vs Sandbox) -->
+                <div class="space-y-2 pt-1">
+                    <div class="flex rounded-lg bg-gray-100 dark:bg-zinc-950 p-1 text-xs">
+                        <button onclick="switchViewMode('reader')" id="mode-reader-btn" class="flex-1 py-1.5 rounded-md font-medium bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm transition">Reader Text</button>
+                        <button onclick="switchViewMode('sandbox')" id="mode-sandbox-btn" class="flex-1 py-1.5 rounded-md font-medium text-gray-600 dark:text-zinc-400 transition">Sandbox Frame</button>
+                    </div>
+
+                    <!-- Reader Content Box -->
+                    <div id="reader-view-box" class="bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl p-3 text-[11px] font-mono text-gray-600 dark:text-zinc-300 max-h-48 overflow-y-auto whitespace-pre-wrap">
+                        -
+                    </div>
+
+                    <!-- Sandbox IFrame Box -->
+                    <div id="sandbox-view-box" class="hidden w-full h-72 bg-white rounded-xl overflow-hidden border border-gray-200 dark:border-zinc-800">
+                        <iframe id="sandbox-iframe" class="w-full h-full border-0" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loader State Box -->
+            <div id="loader-card" class="hidden bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800/80 rounded-2xl p-8 text-center space-y-3 shadow-sm">
+                <div class="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                <p class="text-xs font-medium text-gray-700 dark:text-zinc-300" id="loader-status-text">Mengurai Shortlink & Menembus Proteksi...</p>
+            </div>
+
+            <!-- Popular Quick Shortcuts -->
+            <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800/80 rounded-2xl p-4 shadow-sm space-y-2.5">
+                <h4 class="text-xs font-semibold text-gray-500 dark:text-zinc-400">Pengujian Cepat (Quick Test):</h4>
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                    <button onclick="runQuickTest('https://httpbin.org/json')" class="p-2.5 bg-gray-50 dark:bg-zinc-950 hover:bg-gray-100 dark:hover:bg-zinc-800 border border-gray-200 dark:border-zinc-800 rounded-xl text-gray-700 dark:text-zinc-300 transition truncate">Test JSON</button>
+                    <button onclick="runQuickTest('https://example.com')" class="p-2.5 bg-gray-50 dark:bg-zinc-950 hover:bg-gray-100 dark:hover:bg-zinc-800 border border-gray-200 dark:border-zinc-800 rounded-xl text-gray-700 dark:text-zinc-300 transition truncate">Example.com</button>
+                    <button onclick="runQuickTest('https://icanhazip.com')" class="p-2.5 bg-gray-50 dark:bg-zinc-950 hover:bg-gray-100 dark:hover:bg-zinc-800 border border-gray-200 dark:border-zinc-800 rounded-xl text-gray-700 dark:text-zinc-300 transition truncate">Check IP</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: HISTORY -->
+        <div id="view-history" class="hidden space-y-4">
+            <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800/80 rounded-2xl p-4 shadow-sm space-y-3">
+                <div class="flex items-center justify-between border-b border-gray-100 dark:border-zinc-800 pb-3">
+                    <h3 class="text-xs font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left text-emerald-500"></i> Riwayat & Tautan Tersimpan
+                    </h3>
+                    <button onclick="clearHistory()" class="text-xs text-gray-500 hover:text-red-500 transition">Hapus Semua</button>
+                </div>
+                <div id="history-list-container" class="space-y-2 max-h-[500px] overflow-y-auto">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl border-t border-gray-200 dark:border-zinc-800 transition-colors duration-300">
+        <div class="max-w-md mx-auto px-6 h-16 flex items-center justify-around">
+            <button onclick="switchTab('studio')" id="nav-btn-studio" class="flex flex-col items-center justify-center space-y-1 text-emerald-500 transition">
+                <i class="fa-solid fa-compass text-base"></i>
+                <span class="text-[10px] font-medium">Bypass</span>
+            </button>
+            <button onclick="switchTab('history')" id="nav-btn-history" class="flex flex-col items-center justify-center space-y-1 text-gray-400 hover:text-gray-600 dark:hover:text-zinc-200 transition">
+                <i class="fa-solid fa-bookmark text-base"></i>
+                <span class="text-[10px] font-medium">Riwayat</span>
+            </button>
+        </div>
+    </nav>
+
+    <script>
+        let historyData = JSON.parse(localStorage.getItem('elka_history') || '[]');
+        let currentFinalUrl = "";
+        let currentRawPayload = "";
+
+        // Dark Mode Initialization
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('elka_theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('elka_theme', 'dark');
+            }
+        }
+
+        if (localStorage.getItem('elka_theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+        }
+
+        // Tab Switcher
+        function switchTab(tab) {
+            const studioView = document.getElementById('view-studio');
+            const historyView = document.getElementById('view-history');
+            const navStudio = document.getElementById('nav-btn-studio');
+            const navHistory = document.getElementById('nav-btn-history');
+
+            if (tab === 'studio') {
+                studioView.classList.remove('hidden');
+                historyView.classList.add('hidden');
+                navStudio.className = "flex flex-col items-center justify-center space-y-1 text-emerald-500 transition";
+                navHistory.className = "flex flex-col items-center justify-center space-y-1 text-gray-400 hover:text-gray-600 dark:hover:text-zinc-200 transition";
+            } else {
+                historyView.classList.remove('hidden');
+                studioView.classList.add('hidden');
+                navHistory.className = "flex flex-col items-center justify-center space-y-1 text-emerald-500 transition";
+                navStudio.className = "flex flex-col items-center justify-center space-y-1 text-gray-400 hover:text-gray-600 dark:hover:text-zinc-200 transition";
+                renderHistoryList();
+            }
+        }
+
+        function clearInput() {
+            document.getElementById('url-input').value = '';
+        }
+
+        async function pasteClipboard() {
+            try {
+                const text = await navigator.clipboard.readText();
+                if (text) {
+                    document.getElementById('url-input').value = text.trim();
+                    showToast('Tautan berhasil ditempel!');
+                }
+            } catch (err) {
+                showToast('Gagal membaca clipboard. Tempel manual.');
+            }
+        }
+
+        function runQuickTest(url) {
+            document.getElementById('url-input').value = url;
+            handleBypassSubmit(new Event('submit'));
+        }
+
+        // Core Bypass Execution Function
+        async function handleBypassSubmit(event) {
+            event.preventDefault();
+            let rawUrl = document.getElementById('url-input').value.trim();
+            const method = document.getElementById('bypass-method').value;
+
+            if (!rawUrl) return;
+
+            if (!rawUrl.startsWith('http://') && !rawUrl.startsWith('https://')) {
+                if (rawUrl.includes('.') && !rawUrl.includes(' ')) {
+                    rawUrl = 'https://' + rawUrl;
+                } else {
+                    rawUrl = 'https://html.duckduckgo.com/html/?q=' + encodeURIComponent(rawUrl);
+                }
+                document.getElementById('url-input').value = rawUrl;
+            }
+
+            const loaderCard = document.getElementById('loader-card');
+            const resultCard = document.getElementById('result-card');
+            const statusText = document.getElementById('loader-status-text');
+
+            resultCard.classList.add('hidden');
+            loaderCard.classList.remove('hidden');
+            statusText.textContent = "Menghubungkan ke gateway proxy...";
+
+            let fetchedData = null;
+            let successGateway = "";
+
+            if (method === 'iframe') {
+                setTimeout(() => {
+                    loaderCard.classList.add('hidden');
+                    resultCard.classList.remove('hidden');
+                    currentFinalUrl = rawUrl;
+                    currentRawPayload = `[Sandbox Direct Mode]\nURL: ${rawUrl}`;
+                    document.getElementById('final-url-text').textContent = rawUrl;
+                    document.getElementById('external-open-btn').href = rawUrl;
+                    document.getElementById('reader-view-box').textContent = currentRawPayload;
+                    document.getElementById('sandbox-iframe').src = rawUrl;
+                    document.getElementById('result-meta-info').textContent = "Sandbox Frame Mode";
+                    saveToHistory(rawUrl, rawUrl);
+                }, 300);
+                return;
+            }
+
+            const proxies = [];
+            if (method === 'auto') {
+                proxies.push(
+                    { name: 'AllOrigins', url: `https://api.allorigins.win/get?url=${encodeURIComponent(rawUrl)}`, type: 'json' },
+                    { name: 'CORSProxy.io', url: `https://corsproxy.io/?${encodeURIComponent(rawUrl)}`, type: 'text' }
+                );
+            } else if (method === 'allorigins') {
+                proxies.push({ name: 'AllOrigins', url: `https://api.allorigins.win/get?url=${encodeURIComponent(rawUrl)}`, type: 'json' });
+            } else {
+                proxies.push({ name: 'CORSProxy.io', url: `https://corsproxy.io/?${encodeURIComponent(rawUrl)}`, type: 'text' });
+            }
+
+            for (let p of proxies) {
+                try {
+                    statusText.textContent = `Mencoba Gateway: ${p.name}...`;
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 7000);
+
+                    const res = await fetch(p.url, { signal: controller.signal });
+                    clearTimeout(timeoutId);
+
+                    if (!res.ok) throw new Error('HTTP error');
+
+                    if (p.type === 'json') {
+                        const json = await res.json();
+                        if (json && json.contents) {
+                            fetchedData = json.contents;
+                            successGateway = p.name;
+                            break;
+                        }
+                    } else {
+                        const text = await res.text();
+                        if (text) {
+                            fetchedData = text;
+                            successGateway = p.name;
+                            break;
+                        }
+                    }
+                } catch (e) {
+                    console.warn(`Gateway ${p.name} error:`, e.message);
+                }
+            }
+
+            if (!fetchedData) {
+                loaderCard.classList.add('hidden');
+                resultCard.classList.remove('hidden');
+                currentFinalUrl = rawUrl;
+                currentRawPayload = `[Fallback Info]: Target membatasi permintaan proxy langsung.\nSilakan gunakan tombol "Buka" atau tab Sandbox Frame.`;
+                document.getElementById('final-url-text').textContent = rawUrl;
+                document.getElementById('external-open-btn').href = rawUrl;
+                document.getElementById('reader-view-box').textContent = currentRawPayload;
+                document.getElementById('sandbox-iframe').src = rawUrl;
+                document.getElementById('result-meta-info').textContent = "Fallback Sandbox Mode";
+                saveToHistory(rawUrl, rawUrl);
+                return;
+            }
+
+            // Extract shortlink destination
+            let destination = rawUrl;
+            try {
+                const metaRefresh = fetchedData.match(/<meta[^>]*http-equiv=["']refresh["'][^>]*content=["'][^;]*;\s*url=([^"']+)["']/i);
+                if (metaRefresh && metaRefresh[1]) {
+                    destination = metaRefresh[1].trim();
+                } else {
+                    const jsRedir = fetchedData.match(/window\.location\.href\s*=\s*['"]([^'"]+)['"]/i) ||
+                                   fetchedData.match(/location\.replace\(['"]([^'"]+)['"]\)/i);
+                    if (jsRedir && jsRedir[1]) {
+                        destination = jsRedir[1].trim();
+                    }
+                }
+            } catch (err) {
+                console.warn('Parsing warning:', err);
+            }
+
+            currentFinalUrl = destination;
+            currentRawPayload = fetchedData.slice(0, 2000);
+
+            loaderCard.classList.add('hidden');
+            resultCard.classList.remove('hidden');
+            document.getElementById('final-url-text').textContent = destination;
+            document.getElementById('external-open-btn').href = destination;
+            document.getElementById('reader-view-box').textContent = currentRawPayload;
+            document.getElementById('sandbox-iframe').src = destination;
+            document.getElementById('result-meta-info').textContent = `Sukses via ${successGateway}`;
+
+            saveToHistory(rawUrl, destination);
+        }
+
+        function switchViewMode(mode) {
+            const readerBtn = document.getElementById('mode-reader-btn');
+            const sandboxBtn = document.getElementById('mode-sandbox-btn');
+            const readerBox = document.getElementById('reader-view-box');
+            const sandboxBox = document.getElementById('sandbox-view-box');
+
+            if (mode === 'reader') {
+                readerBtn.className = "flex-1 py-1.5 rounded-md font-medium bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm transition";
+                sandboxBtn.className = "flex-1 py-1.5 rounded-md font-medium text-gray-600 dark:text-zinc-400 transition";
+                readerBox.classList.remove('hidden');
+                sandboxBox.classList.add('hidden');
+            } else {
+                sandboxBtn.className = "flex-1 py-1.5 rounded-md font-medium bg-white dark:bg-zinc-800 text-gray-900 dark:text-white shadow-sm transition";
+                readerBtn.className = "flex-1 py-1.5 rounded-md font-medium text-gray-600 dark:text-zinc-400 transition";
+                sandboxBox.classList.remove('hidden');
+                readerBox.classList.add('hidden');
+            }
+        }
+
+        function copyFinalUrl() {
+            if (!currentFinalUrl) return;
+            const ta = document.createElement('textarea');
+            ta.value = currentFinalUrl;
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                showToast('URL berhasil disalin!');
+            } catch (e) {
+                showToast('Gagal menyalin URL.');
+            }
+            document.body.removeChild(ta);
+        }
+
+        function showToast(msg) {
+            const div = document.createElement('div');
+            div.className = 'fixed bottom-20 left-1/2 -translate-x-1/2 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-xs font-medium px-4 py-2.5 rounded-xl shadow-xl z-50 transition';
+            div.textContent = msg;
+            document.body.appendChild(div);
+            setTimeout(() => div.remove(), 2200);
+        }
+
+        // History & Bookmarks Management
+        function saveToHistory(source, dest) {
+            const entry = { source, dest, time: new Date().toLocaleTimeString() };
+            historyData = historyData.filter(item => item.source !== source);
+            historyData.unshift(entry);
+            if (historyData.length > 30) historyData.pop();
+            localStorage.setItem('elka_history', JSON.stringify(historyData));
+        }
+
+        function renderHistoryList() {
+            const container = document.getElementById('history-list-container');
+            if (historyData.length === 0) {
+                container.innerHTML = '<p class="text-xs text-gray-400 dark:text-zinc-500 text-center py-8">Belum ada riwayat tersimpan.</p>';
+                return;
+            }
+            container.innerHTML = historyData.map((item, idx) => `
+                <div class="bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 p-3 rounded-xl flex items-center justify-between gap-3 text-xs">
+                    <div class="truncate">
+                        <p class="font-mono text-gray-900 dark:text-white truncate">${item.dest}</p>
+                        <p class="text-[10px] text-gray-400 dark:text-zinc-500 truncate mt-0.5">Asal: ${item.source} &bull; ${item.time}</p>
+                    </div>
+                    <button onclick="loadHistoryItem('${item.dest}')" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-medium transition flex-shrink-0">Buka</button>
+                </div>
+            `).join('');
+        }
+
+        function loadHistoryItem(url) {
+            document.getElementById('url-input').value = url;
+            switchTab('studio');
+            handleBypassSubmit(new Event('submit'));
+        }
+
+        function clearHistory() {
+            historyData = [];
+            localStorage.removeItem('elka_history');
+            renderHistoryList();
+        }
+    </script>
+</body>
+</html>
